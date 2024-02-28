@@ -346,12 +346,12 @@ class PRCodeSuggestions:
 
             pr_body = "## PR Code Suggestions\n\n"
 
-            pr_body += "<table>"
+            # pr_body += "<table>"
             header = f"Suggestions"
-            delta = 76
-            header += "&nbsp; " * delta
-            pr_body += f"""<thead><tr><td>Category</td><td align=left>{header}</td></tr></thead>"""
-            pr_body += """<tbody>"""
+            # delta = 76
+            # header += "&nbsp; " * delta
+            # pr_body += f"""<thead><tr><td>Category</td><td align=left>{header}</td></tr></thead>"""
+            # pr_body += """<tbody>"""
             suggestions_labels = dict()
             # add all suggestions related to each label
             for suggestion in data['code_suggestions']:
@@ -363,7 +363,9 @@ class PRCodeSuggestions:
             for label, suggestions in suggestions_labels.items():
                 num_suggestions=len(suggestions)
                 # pr_body += f"""<tr><td><strong>{label}</strong></td>"""
-                pr_body += f"""<tr><td rowspan={num_suggestions}><strong>{label}</strong></td>\n"""
+                # pr_body += f"""<tr><td rowspan={num_suggestions}><strong>{label}</strong></td>\n"""
+                pr_body +=f"<tbody><strong>{label.capitalize()}</strong>\n"
+                pr_body +="<table>"
                 # pr_body += f"""<td>"""
                 # pr_body += f"""<details><summary>{len(suggestions)} suggestions</summary>"""
                 # pr_body += f"""<table>"""
@@ -383,7 +385,7 @@ class PRCodeSuggestions:
 
                     suggestion_content = suggestion['suggestion_content'].rstrip().rstrip()
 
-                    suggestion_content = insert_br_after_x_chars(suggestion_content, 90)
+                    # suggestion_content = insert_br_after_x_chars(suggestion_content, 120)
                     # pr_body += f"<tr><td><details><summary>{suggestion_content}</summary>"
                     existing_code = suggestion['existing_code'].rstrip()+"\n"
                     improved_code = suggestion['improved_code'].rstrip()+"\n"
@@ -395,14 +397,13 @@ class PRCodeSuggestions:
 
                     example_code = ""
                     example_code += f"```diff\n{patch}\n```\n"
-                    if i==0:
-                        pr_body += f"""<td>\n\n"""
-                    else:
-                        pr_body += f"""<tr><td>\n\n"""
+
+                    pr_body += f"""<tr><td>\n\n"""
                     suggestion_summary = suggestion['one_sentence_summary'].strip()
+                    PAD_LEN = 155
+                    suggestion_summary = suggestion_summary + max((PAD_LEN-len(suggestion_summary)), 0)*"&nbsp;"
                     if '`' in suggestion_summary:
                         suggestion_summary = replace_code_tags(suggestion_summary)
-                    # suggestion_summary = suggestion_summary + max((77-len(suggestion_summary)), 0)*"&nbsp;"
                     pr_body += f"""\n\n<details><summary>{suggestion_summary}</summary>\n\n___\n\n"""
 
                     pr_body += f"""
@@ -417,8 +418,9 @@ class PRCodeSuggestions:
                     pr_body += f"</td></tr>"
 
                 # pr_body += "</details>"
-                pr_body += """</td></tr>"""
-            pr_body += """</tr></tbody></table>"""
+                # pr_body += """</td></tr>"""
+                pr_body += "\n\n</table>\n\n"
+            # pr_body += """</tr></tbody></table>"""
             return pr_body
         except Exception as e:
             get_logger().info(f"Failed to publish summarized code suggestions, error: {e}")
