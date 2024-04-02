@@ -82,6 +82,7 @@ summarize = true
 extra_instructions = ""
 rank_suggestions = false
 enable_help_text=true
+persistent_comment=false
 # params for '/improve --extended' mode
 auto_extended_mode=true
 num_code_suggestions_per_chunk=5
@@ -109,6 +110,11 @@ file = ""              # in case there are several components with the same name
 class_name = ""        # in case there are several methods with the same name in the same file, you can specify the relevant class name
 enable_help_text=true
 
+[pr_improve_component] # /improve_component #
+num_code_suggestions=4
+extra_instructions = ""
+file = ""              # in case there are several components with the same name, you can specify the relevant file
+class_name = ""
 
 [checks] # /checks (pro feature) #
 enable_auto_checks_feedback=true
@@ -155,7 +161,7 @@ push_commands = [
     "/review --pr_reviewer.num_code_suggestions=0",
 ]
 ignore_pr_title = []
-ignore_bot_pr = false
+ignore_bot_pr = true
 
 [gitlab]
 url = "https://gitlab.com" # URL to the gitlab service
